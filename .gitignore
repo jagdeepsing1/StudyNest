@@ -1,0 +1,8 @@
+# macOS files
+.DS_Store
+
+# Editor settings
+.vscode/
+
+# Dependencies
+node_modules/

@@ -120,3 +120,14 @@ To reset everything back to defaults: go to **Settings → Reset All Data**.
 ```
 "Add drag-and-drop to reorder assignments by priority"
 ```
+## Branch Naming Convention
+
+All branches must follow this format:
+
+`SN-<number>-short-description`
+
+Examples:
+- `SN-8-config-changes`
+- `SN-12-fix-readme`
+
+Each branch should be linked to its corresponding Jira story.
