@@ -52,7 +52,7 @@ const SN_STORAGE = (() => {
     }
     if (!localStorage.getItem(KEYS.settings)) {
       save(KEYS.settings, {
-        studentName       : 'Jag',
+        studentName       : 'Student',
         email             : 'jag@studynest.edu',
         theme             : 'light',
         compactMode       : false,
