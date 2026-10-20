@@ -1542,6 +1542,4 @@ function renderSettings() {
 // BOOT
 // ══════════════════════════════════════════════
 
-
-
 navigate('dashboard');

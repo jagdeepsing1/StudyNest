@@ -28,6 +28,17 @@ const SN_STORAGE = (() => {
     localStorage.setItem(key, JSON.stringify(value));
   }
 
+  // ── Default settings ──────────────────────────────────────────────────
+  const DEFAULT_SETTINGS = {
+    studentName       : 'Student',
+    email             : 'student@studynest.edu',
+    theme             : 'light',
+    compactMode       : false,
+    notifyAssignments : true,
+    notifyMessages    : true,
+    notifyGrades      : true,
+  };
+
   // ── Seed on first run ─────────────────────────────────────────────────
   // Copy seed data into localStorage the very first time so the app has
   // something to display and so mutations don't touch SN_DATA directly.
@@ -51,16 +62,12 @@ const SN_STORAGE = (() => {
       save(KEYS.lessons, lessonMap);
     }
     if (!localStorage.getItem(KEYS.settings)) {
-      save(KEYS.settings, {
-        studentName       : 'Student',
-        email             : 'jag@studynest.edu',
-        theme             : 'light',
-        compactMode       : false,
-        notifyAssignments : true,
-        notifyMessages    : true,
-        notifyGrades      : true,
-      });
+      save(KEYS.settings, DEFAULT_SETTINGS);
     }
+  }
+
+  function getDefaultSettings() {
+    return { ...DEFAULT_SETTINGS };
   }
 
   // ══════════════════════════════════════════════
@@ -191,6 +198,9 @@ const SN_STORAGE = (() => {
   }
 
   function saveSettings(changes) {
+    if ('studentName' in changes) {
+      changes = { ...changes, studentName: changes.studentName.trim() || DEFAULT_SETTINGS.studentName };
+    }
     save(KEYS.settings, { ...getSettings(), ...changes });
   }
 
@@ -216,7 +226,7 @@ const SN_STORAGE = (() => {
     // Messages
     getMessages, markMessageRead, unreadCount,
     // Settings
-    getSettings, saveSettings,
+    getDefaultSettings, getSettings, saveSettings,
     // Dev
     resetAll,
   };
