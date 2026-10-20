@@ -14,9 +14,13 @@ A complete frontend-only student LMS (Learning Management System) built with van
    cd StudyNest
    ```
 
-3. Double-click `index.html` to open the app in your browser.
+3. Open the app in your browser:
+   ```bash
+   open index.html
+   ```
 
 No installation or build step required.
+
 ---
 
 ## Project Structure
