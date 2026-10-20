@@ -5,6 +5,19 @@
 
 const SN_DATA = (() => {
 
+  // Generate dates relative to today using local time
+  function daysFromToday(days) {
+    const date = new Date();
+    date.setHours(12, 0, 0, 0);
+    date.setDate(date.getDate() + days);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
   // ── Courses ────────────────────────────────────────────────────────────
   const courses = [
     {
@@ -194,28 +207,28 @@ const SN_DATA = (() => {
       id: 'a1', courseId: 'hindi', moduleId: 'h-m1',
       title: 'Devanagari Script Practice',
       description: 'Write the full Devanagari alphabet — all vowels and consonants — clearly. Label each character with its transliteration. Submit as a scanned handwritten sheet or typed document.',
-      due: '2026-10-05', points: 50,
+      due: daysFromToday(3), points: 50,
       status: 'graded', grade: 47,
     },
     {
       id: 'a2', courseId: 'hindi', moduleId: 'h-m2',
       title: 'Hindi Grammar Quiz',
       description: 'Complete the online grammar quiz covering nouns, pronouns, and present-tense verb conjugations. 25 multiple-choice questions.',
-      due: '2026-10-12', points: 100,
+      due: daysFromToday(11), points: 100,
       status: 'submitted', grade: null,
     },
     {
       id: 'a3', courseId: 'hindi', moduleId: 'h-m3',
       title: 'Short Story Reading Response',
       description: 'Read the provided short story in Hindi and write a 150-word response in Hindi summarizing the main events and your reaction.',
-      due: '2026-10-20', points: 75,
+      due: daysFromToday(17), points: 75,
       status: 'in-progress', grade: null,
     },
     {
       id: 'a4', courseId: 'hindi', moduleId: 'h-m4',
       title: 'Conversation Script',
       description: 'Write a dialogue (minimum 10 exchanges) between two people meeting for the first time. Use vocabulary from Module 4. Be ready to present it.',
-      due: '2026-10-28', points: 100,
+      due: daysFromToday(24), points: 100,
       status: 'not-started', grade: null,
     },
 
@@ -224,28 +237,28 @@ const SN_DATA = (() => {
       id: 'a5', courseId: 'punjabi', moduleId: 'p-m1',
       title: 'Gurmukhi Alphabet Writing',
       description: 'Write the complete Gurmukhi alphabet with vowel signs. Include at least 10 example words using the characters. Neatness counts.',
-      due: '2026-10-06', points: 50,
+      due: daysFromToday(4), points: 50,
       status: 'graded', grade: 44,
     },
     {
       id: 'a6', courseId: 'punjabi', moduleId: 'p-m2',
       title: 'Grammar Worksheet',
       description: 'Complete the provided worksheet on Punjabi nouns, gender rules, and verb conjugation in simple present and past tense.',
-      due: '2026-10-14', points: 100,
+      due: daysFromToday(9), points: 100,
       status: 'graded', grade: 88,
     },
     {
       id: 'a7', courseId: 'punjabi', moduleId: 'p-m3',
       title: 'Folk Story Summary',
       description: 'Read the assigned Punjabi folk story and write a 200-word summary in Punjabi. Focus on characters, plot, and moral.',
-      due: '2026-10-22', points: 75,
+      due: daysFromToday(19), points: 75,
       status: 'in-progress', grade: null,
     },
     {
       id: 'a8', courseId: 'punjabi', moduleId: 'p-m4',
       title: 'Festival Presentation',
       description: 'Prepare a 5-minute spoken presentation about a Punjabi festival of your choice. Speak in Punjabi for at least 3 minutes.',
-      due: '2026-10-30', points: 100,
+      due: daysFromToday(26), points: 100,
       status: 'not-started', grade: null,
     },
 
@@ -254,50 +267,50 @@ const SN_DATA = (() => {
       id: 'a9', courseId: 'english', moduleId: 'e-m1',
       title: 'Grammar Diagnostic Test',
       description: 'Take the grammar diagnostic covering all parts of speech, sentence structure, tenses, and punctuation. 40 questions, 60 minutes.',
-      due: '2026-10-04', points: 100,
+      due: daysFromToday(5), points: 100,
       status: 'graded', grade: 96,
     },
     {
       id: 'a10', courseId: 'english', moduleId: 'e-m2',
       title: 'Five-Paragraph Essay',
       description: 'Write a 500-word argumentative essay on the topic: "Technology has more benefits than drawbacks for students." Include a clear thesis, three body paragraphs with evidence, and a conclusion.',
-      due: '2026-10-15', points: 150,
+      due: daysFromToday(13), points: 150,
       status: 'submitted', grade: null,
     },
     {
       id: 'a11', courseId: 'english', moduleId: 'e-m3',
       title: 'Reading Comprehension Exercise',
       description: 'Read the provided article and answer 10 comprehension questions. Questions test main idea, inference, vocabulary in context, and author purpose.',
-      due: '2026-10-23', points: 75,
+      due: daysFromToday(-2), points: 75,
       status: 'not-started', grade: null,
     },
     {
       id: 'a12', courseId: 'english', moduleId: 'e-m4',
       title: 'Class Presentation',
       description: 'Deliver a 7-minute presentation on a topic of your choice. You will be graded on clarity, organization, delivery, and use of English.',
-      due: '2026-11-01', points: 100,
+      due: daysFromToday(28), points: 100,
       status: 'not-started', grade: null,
     },
   ];
 
   // ── Calendar Events ────────────────────────────────────────────────────
   const events = [
-    { id: 'ev1',  date: '2026-10-05', title: 'Hindi — Script Practice Due',       type: 'assignment', courseId: 'hindi' },
-    { id: 'ev2',  date: '2026-10-06', title: 'Punjabi — Alphabet Writing Due',     type: 'assignment', courseId: 'punjabi' },
-    { id: 'ev3',  date: '2026-10-04', title: 'English — Grammar Diagnostic Due',   type: 'assignment', courseId: 'english' },
-    { id: 'ev4',  date: '2026-10-08', title: 'Hindi — Office Hours (Dr. Sharma)',  type: 'event',      courseId: 'hindi' },
-    { id: 'ev5',  date: '2026-10-10', title: 'Punjabi — Midterm Review Session',   type: 'event',      courseId: 'punjabi' },
-    { id: 'ev6',  date: '2026-10-12', title: 'Hindi — Grammar Quiz Due',           type: 'assignment', courseId: 'hindi' },
-    { id: 'ev7',  date: '2026-10-14', title: 'Punjabi — Grammar Worksheet Due',    type: 'assignment', courseId: 'punjabi' },
-    { id: 'ev8',  date: '2026-10-15', title: 'English — Five-Para Essay Due',      type: 'assignment', courseId: 'english' },
-    { id: 'ev9',  date: '2026-10-18', title: 'All Courses — Mid-Semester Check',   type: 'event',      courseId: null },
-    { id: 'ev10', date: '2026-10-20', title: 'Hindi — Story Reading Response Due', type: 'assignment', courseId: 'hindi' },
-    { id: 'ev11', date: '2026-10-22', title: 'Punjabi — Folk Story Summary Due',   type: 'assignment', courseId: 'punjabi' },
-    { id: 'ev12', date: '2026-10-23', title: 'English — Reading Comprehension Due',type: 'assignment', courseId: 'english' },
-    { id: 'ev13', date: '2026-10-28', title: 'Hindi — Conversation Script Due',    type: 'assignment', courseId: 'hindi' },
-    { id: 'ev14', date: '2026-10-30', title: 'Punjabi — Festival Presentation Due',type: 'assignment', courseId: 'punjabi' },
-    { id: 'ev15', date: '2026-11-01', title: 'English — Class Presentation Due',   type: 'assignment', courseId: 'english' },
-    { id: 'ev16', date: '2026-10-25', title: 'Study Group — Language Lab',         type: 'event',      courseId: null },
+    { id: 'ev1',  date: daysFromToday(3),  title: 'Hindi — Script Practice Due',        type: 'assignment', courseId: 'hindi' },
+    { id: 'ev2',  date: daysFromToday(4),  title: 'Punjabi — Alphabet Writing Due',      type: 'assignment', courseId: 'punjabi' },
+    { id: 'ev3',  date: daysFromToday(5),  title: 'English — Grammar Diagnostic Due',    type: 'assignment', courseId: 'english' },
+    { id: 'ev4',  date: daysFromToday(6),  title: 'Hindi — Office Hours (Dr. Sharma)',   type: 'event',      courseId: 'hindi' },
+    { id: 'ev5',  date: daysFromToday(7),  title: 'Punjabi — Midterm Review Session',    type: 'event',      courseId: 'punjabi' },
+    { id: 'ev6',  date: daysFromToday(11), title: 'Hindi — Grammar Quiz Due',            type: 'assignment', courseId: 'hindi' },
+    { id: 'ev7',  date: daysFromToday(9),  title: 'Punjabi — Grammar Worksheet Due',     type: 'assignment', courseId: 'punjabi' },
+    { id: 'ev8',  date: daysFromToday(13), title: 'English — Five-Para Essay Due',       type: 'assignment', courseId: 'english' },
+    { id: 'ev9',  date: daysFromToday(15), title: 'All Courses — Mid-Semester Check',    type: 'event',      courseId: null },
+    { id: 'ev10', date: daysFromToday(17), title: 'Hindi — Story Reading Response Due',  type: 'assignment', courseId: 'hindi' },
+    { id: 'ev11', date: daysFromToday(19), title: 'Punjabi — Folk Story Summary Due',    type: 'assignment', courseId: 'punjabi' },
+    { id: 'ev12', date: daysFromToday(-2), title: 'English — Reading Comprehension Due', type: 'assignment', courseId: 'english' },
+    { id: 'ev13', date: daysFromToday(24), title: 'Hindi — Conversation Script Due',     type: 'assignment', courseId: 'hindi' },
+    { id: 'ev14', date: daysFromToday(26), title: 'Punjabi — Festival Presentation Due', type: 'assignment', courseId: 'punjabi' },
+    { id: 'ev15', date: daysFromToday(28), title: 'English — Class Presentation Due',    type: 'assignment', courseId: 'english' },
+    { id: 'ev16', date: daysFromToday(21), title: 'Study Group — Language Lab',          type: 'event',      courseId: null },
   ];
 
   // ── Inbox Messages ─────────────────────────────────────────────────────
@@ -307,8 +320,8 @@ const SN_DATA = (() => {
       from: 'Dr. Priya Sharma',
       course: 'Hindi (LANG-101)',
       subject: 'Great work on the Script Practice!',
-      body: 'Hi Alex, I just finished grading the Devanagari Script Practice assignments. Your work was excellent — you scored 47/50. Your letter forms are very clean. Keep it up! The grammar quiz is coming up on October 12th, so start reviewing your verb conjugations. Let me know if you have any questions during office hours.',
-      date: '2026-10-06',
+      body: 'Hi, I just finished grading the Devanagari Script Practice assignments. Your work was excellent — you scored 47/50. Your letter forms are very clean. Keep it up! The grammar quiz is coming up soon, so start reviewing your verb conjugations. Let me know if you have any questions during office hours.',
+      date: daysFromToday(1),
       read: false,
     },
     {
@@ -316,8 +329,8 @@ const SN_DATA = (() => {
       from: 'Prof. Harjit Kaur',
       course: 'Punjabi (LANG-102)',
       subject: 'Module 2 Grammar Worksheet — Grades Posted',
-      body: 'Hello Alex, the grammar worksheet grades are now posted. You scored 88/100 — solid work! A few notes: pay attention to verb agreement with gender in sentences. I have added some feedback directly on your submission. The folk story summary is due on October 22nd. Please reach out if you need help.',
-      date: '2026-10-16',
+      body: 'Hello, the grammar worksheet grades are now posted. You scored 88/100 — solid work! A few notes: pay attention to verb agreement with gender in sentences. I have added some feedback directly on your submission. The folk story summary is due in about two weeks. Please reach out if you need help.',
+      date: daysFromToday(5),
       read: false,
     },
     {
@@ -325,26 +338,26 @@ const SN_DATA = (() => {
       from: 'Ms. Sarah Mitchell',
       course: 'English (LANG-103)',
       subject: 'Essay Submission Received',
-      body: 'Hi Alex, I have received your Five-Paragraph Essay submission. I will have grades back to you within a week. In the meantime, start thinking about your Class Presentation topic — presentations begin November 1st. Remember to focus on a clear structure and strong evidence. Good luck!',
-      date: '2026-10-16',
+      body: 'Hi, I have received your Five-Paragraph Essay submission. I will have grades back to you within a week. In the meantime, start thinking about your Class Presentation topic — presentations are scheduled toward the end of the month. Remember to focus on a clear structure and strong evidence. Good luck!',
+      date: daysFromToday(5),
       read: true,
     },
     {
       id: 'msg4',
       from: 'StudyNest System',
       course: 'All Courses',
-      subject: 'Reminder: Mid-Semester Check on October 18th',
-      body: 'This is a reminder that the mid-semester academic check-in is scheduled for October 18th. Please review your progress in all courses and reach out to your instructors if you have any concerns about your grades or workload. The academic advisor will also be available for drop-in sessions from 10am–2pm.',
-      date: '2026-10-14',
+      subject: 'Reminder: Mid-Semester Check Coming Up',
+      body: 'This is a reminder that the mid-semester academic check-in is coming up later this week. Please review your progress in all courses and reach out to your instructors if you have any concerns about your grades or workload. The academic advisor will also be available for drop-in sessions from 10am–2pm.',
+      date: daysFromToday(3),
       read: true,
     },
     {
       id: 'msg5',
       from: 'Dr. Priya Sharma',
       course: 'Hindi (LANG-101)',
-      subject: 'Office Hours This Week — October 8th',
-      body: 'Dear students, just a reminder that I will be holding office hours this Thursday, October 8th from 2pm to 4pm in Room 204. Feel free to come by with any questions about grammar, the upcoming quiz, or course material. No appointment needed.',
-      date: '2026-10-07',
+      subject: 'Office Hours This Week',
+      body: 'Dear students, just a reminder that I will be holding office hours this week from 2pm to 4pm in Room 204. Feel free to come by with any questions about grammar, the upcoming quiz, or course material. No appointment needed.',
+      date: daysFromToday(2),
       read: true,
     },
   ];
