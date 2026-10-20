@@ -764,14 +764,14 @@ function renderDashboard() {
         <div class="db-fb-avatar" style="background:${course.color}">${f.avatar}</div>
         <div class="db-fb-body">
           <div class="db-fb-header">
-            <span class="db-fb-from">${f.instructor}</span>
-            <span class="db-fb-course" style="color:${course.color}">${course.icon} ${course.name}</span>
+            <span class="db-fb-from">${escHtml(f.instructor)}</span>
+            <span class="db-fb-course" style="color:${course.color}">${course.icon} ${escHtml(course.name)}</span>
             <span class="db-fb-date">${f.date}</span>
           </div>
-          <div class="db-fb-assignment">Re: ${f.assignment}
+          <div class="db-fb-assignment">Re: ${escHtml(f.assignment)}
             <span class="db-fb-grade" style="color:${course.color}">${f.grade}</span>
           </div>
-          <p class="db-fb-text">"${f.text}"</p>
+          <p class="db-fb-text">"${escHtml(f.text)}"</p>
         </div>
       </div>`;
   }).join('');
@@ -1172,7 +1172,7 @@ function renderAssignmentDetail() {
           <div class="submission-area">
             <h3>Submission</h3>
             <p class="sub-hint">This is a practice submission area. No files are uploaded.</p>
-            <textarea id="sub-text" placeholder="Type your notes or work here…" rows="5">${a.submissionText || ''}</textarea>
+            <textarea id="sub-text" placeholder="Type your notes or work here…" rows="5">${escHtml(a.submissionText || '')}</textarea>
             <div class="sub-actions">
               ${a.status !== 'graded' ? `
                 <button class="btn btn-secondary" id="btn-progress">Mark In Progress</button>
