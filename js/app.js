@@ -1516,7 +1516,7 @@ function renderSettings() {
   document.getElementById('btn-save-settings').addEventListener('click', () => {
     const theme = mainContent.querySelector('[data-theme].active').dataset.theme;
     SN_STORAGE.saveSettings({
-      studentName       : document.getElementById('set-name').value.trim() || 'Jag',
+      studentName       : document.getElementById('set-name').value.trim() || SN_STORAGE.getDefaultSettings().studentName,
       email             : document.getElementById('set-email').value.trim(),
       theme,
       compactMode       : document.getElementById('set-compact').checked,
@@ -1541,13 +1541,5 @@ function renderSettings() {
 // ══════════════════════════════════════════════
 // BOOT
 // ══════════════════════════════════════════════
-
-// One-time migration: rename Alex → Jag in stored settings
-(function migrateStudentName() {
-  const s = SN_STORAGE.getSettings();
-  if (s.studentName === 'Alex') {
-    SN_STORAGE.saveSettings({ studentName: 'Jag', email: 'jag@studynest.edu' });
-  }
-})();
 
 navigate('dashboard');
