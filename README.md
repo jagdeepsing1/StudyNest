@@ -4,18 +4,47 @@ A complete frontend-only student LMS (Learning Management System) built with van
 
 ## How to Run
 
-1. Open the `studynest/` folder
-2. Double-click `index.html` — or right-click → Open With → your browser
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/jagdeepsing1/StudyNest.git
+   ```
 
-That's it. No server, no build step.
+2. Open the project folder:
+   ```bash
+   cd StudyNest
+   ```
+
+3. Open the app in your browser:
+   ```bash
+   open index.html
+   ```
+
+No installation or build step required.
+
+---
+
+## Contributing
+
+### Branch Naming Convention
+
+All branches must follow this format:
+
+`SN-<number>-short-description`
+
+Examples:
+- `SN-8-config-changes`
+- `SN-9-fix-readme`
+
+Each branch should be linked to its corresponding Jira story.
 
 ---
 
 ## Project Structure
 
 ```
-studynest/
+StudyNest/
 ├── index.html          ← App shell (sidebar, topbar, content area)
+├── README.md           ← Project overview and setup instructions
 ├── css/
 │   └── styles.css      ← All styles: light/dark themes, layout, components
 └── js/
