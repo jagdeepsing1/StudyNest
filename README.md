@@ -11,6 +11,22 @@ That's it. No server, no build step.
 
 ---
 
+## Contributing
+
+### Branch Naming Convention
+
+All branches must follow this format:
+
+`SN-<number>-short-description`
+
+Examples:
+- `SN-8-config-changes`
+- `SN-9-fix-readme`
+
+Each branch should be linked to its corresponding Jira story.
+
+---
+
 ## Project Structure
 
 ```
