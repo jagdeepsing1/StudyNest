@@ -3,6 +3,7 @@
    All sample data. Replace with API calls later.
    ══════════════════════════════════════════════ */
 
+// eslint-disable-next-line no-unused-vars
 const SN_DATA = (() => {
 
   // ── Courses ────────────────────────────────────────────────────────────

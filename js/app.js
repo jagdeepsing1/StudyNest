@@ -145,6 +145,7 @@ function formatDate(str) {
 function isOverdue(due) { return due && due < todayStr(); }
 function isDueToday(due) { return due === todayStr(); }
 
+// eslint-disable-next-line no-unused-vars
 function courseColor(courseId) {
   const c = SN_DATA.courses.find(x => x.id === courseId);
   return c ? c.color : '#6366f1';
@@ -426,7 +427,7 @@ function buildWeeklyTimeline() {
 // ══════════════════════════════════════════════
 
 /** Recommend the single most urgent thing to work on next. */
-function buildNextStepCard(assignments, today) {
+function buildNextStepCard(assignments, _today) {
   // Priority 1 — in-progress assignment closest to due
   // Priority 2 — not-started assignment closest to due
   // Priority 3 — first incomplete lesson in any course

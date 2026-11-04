@@ -5,6 +5,7 @@
    read-only seed data.
    ══════════════════════════════════════════════ */
 
+// eslint-disable-next-line no-unused-vars
 const SN_STORAGE = (() => {
 
   const KEYS = {
