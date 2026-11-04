@@ -186,6 +186,18 @@ const SN_STORAGE = (() => {
     save(KEYS.messages, list);
   }
 
+  function markMessageUnread(id) {
+    const list = getMessages().map(m =>
+      m.id === id ? { ...m, read: false } : m
+    );
+    save(KEYS.messages, list);
+  }
+
+  function deleteMessage(id) {
+    const list = getMessages().filter(m => m.id !== id);
+    save(KEYS.messages, list);
+  }
+
   function unreadCount() {
     return getMessages().filter(m => !m.read).length;
   }
@@ -224,7 +236,7 @@ const SN_STORAGE = (() => {
     // Progress & grades
     moduleProgress, courseProgress, courseGrade, overallGrade, pctToLetter,
     // Messages
-    getMessages, markMessageRead, unreadCount,
+    getMessages, markMessageRead, markMessageUnread, deleteMessage, unreadCount,
     // Settings
     getDefaultSettings, getSettings, saveSettings,
     // Dev
