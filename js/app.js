@@ -1405,7 +1405,7 @@ function renderInbox() {
   const activeId  = currentParams.messageId || null;
   const active    = activeId ? messages.find(m => m.id === activeId) : null;
 
-  const msgList = messages.map(m => `
+  const msgList = messages.length ? messages.map(m => `
     <div class="msg-row ${m.read?'read':'unread'} ${activeId===m.id?'active':''}" data-msg="${m.id}">
       <div class="msg-avatar">${m.from.charAt(0)}</div>
       <div class="msg-preview">
@@ -1413,7 +1413,7 @@ function renderInbox() {
         <div class="msg-subject">${escHtml(m.subject)}</div>
         <div class="msg-date">${formatDate(m.date)}</div>
       </div>
-    </div>`).join('');
+    </div>`).join('') : '<p class="empty-hint">Your inbox is empty.</p>';
 
   const msgBody = active ? `
     <div class="msg-detail">
@@ -1422,6 +1422,10 @@ function renderInbox() {
         <p class="msg-detail-meta">From: ${escHtml(active.from)} · ${escHtml(active.course)} · ${formatDate(active.date)}</p>
       </div>
       <div class="msg-detail-body">${escHtml(active.body)}</div>
+      <div class="msg-actions">
+        <button class="btn btn-secondary btn-mark-unread" data-id="${active.id}">Mark as Unread</button>
+        <button class="btn btn-danger btn-delete-msg" data-id="${active.id}">Delete</button>
+      </div>
     </div>` : `<div class="msg-placeholder">← Select a message to read</div>`;
 
   mainContent.innerHTML = `
@@ -1435,6 +1439,24 @@ function renderInbox() {
       SN_STORAGE.markMessageRead(row.dataset.msg);
       updateInboxBadge();
       navigate('inbox', { messageId: row.dataset.msg });
+    });
+  });
+
+  mainContent.querySelectorAll('.btn-mark-unread').forEach(btn => {
+    btn.addEventListener('click', () => {
+      SN_STORAGE.markMessageUnread(btn.dataset.id);
+      updateInboxBadge();
+      navigate('inbox');
+    });
+  });
+
+  mainContent.querySelectorAll('.btn-delete-msg').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete this message?')) {
+        SN_STORAGE.deleteMessage(btn.dataset.id);
+        updateInboxBadge();
+        navigate('inbox');
+      }
     });
   });
 }
