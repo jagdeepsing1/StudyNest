@@ -25,6 +25,28 @@ No installation or build step required.
 
 ## Contributing
 
+### Setup (Dev Tools)
+
+The app runs without any install step. Dev tooling (ESLint + Prettier) is optional and only needed when contributing code.
+
+```bash
+npm install
+```
+
+### Linting
+
+```bash
+npm run lint        # check for issues
+npm run lint:fix    # auto-fix safe issues
+```
+
+### Formatting
+
+```bash
+npm run format        # write Prettier formatting to js/, css/, index.html
+npm run format:check  # check without writing
+```
+
 ### Branch Naming Convention
 
 All branches must follow this format:

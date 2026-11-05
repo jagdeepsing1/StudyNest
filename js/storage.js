@@ -5,6 +5,7 @@
    read-only seed data.
    ══════════════════════════════════════════════ */
 
+/* exported SN_STORAGE */
 const SN_STORAGE = (() => {
 
   const KEYS = {

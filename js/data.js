@@ -3,6 +3,7 @@
    All sample data. Replace with API calls later.
    ══════════════════════════════════════════════ */
 
+/* exported SN_DATA */
 const SN_DATA = (() => {
 
   // Generate dates relative to today using local time

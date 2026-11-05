@@ -1,0 +1,19 @@
+{
+  "name": "studynest",
+  "version": "1.0.0",
+  "description": "Student Learning Portal — frontend-only vanilla JS LMS",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint js/",
+    "lint:fix": "eslint js/ --fix",
+    "format": "prettier --write js/ css/ index.html",
+    "format:check": "prettier --check js/ css/ index.html"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "eslint": "9.39.5",
+    "globals": "16.3.0",
+    "prettier": "3.6.2"
+  }
+}

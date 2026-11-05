@@ -145,10 +145,7 @@ function formatDate(str) {
 function isOverdue(due) { return due && due < todayStr(); }
 function isDueToday(due) { return due === todayStr(); }
 
-function courseColor(courseId) {
-  const c = SN_DATA.courses.find(x => x.id === courseId);
-  return c ? c.color : '#6366f1';
-}
+
 
 function escHtml(s) {
   return String(s)
@@ -426,7 +423,7 @@ function buildWeeklyTimeline() {
 // ══════════════════════════════════════════════
 
 /** Recommend the single most urgent thing to work on next. */
-function buildNextStepCard(assignments, today) {
+function buildNextStepCard(assignments, _today) {
   // Priority 1 — in-progress assignment closest to due
   // Priority 2 — not-started assignment closest to due
   // Priority 3 — first incomplete lesson in any course
@@ -672,7 +669,7 @@ function renderDashboard() {
     </section>`;
 
   // ── Section 5 — What to Work on Next ────────────────────────────────────
-  const next = buildNextStepCard(assignments, today);
+  const next = buildNextStepCard(assignments);
   const nextSection = next ? `
     <section class="db-next-card" data-next-id="${next.id}" data-next-type="${next.type}">
       <div class="db-next-left">
