@@ -145,11 +145,7 @@ function formatDate(str) {
 function isOverdue(due) { return due && due < todayStr(); }
 function isDueToday(due) { return due === todayStr(); }
 
-// eslint-disable-next-line no-unused-vars
-function courseColor(courseId) {
-  const c = SN_DATA.courses.find(x => x.id === courseId);
-  return c ? c.color : '#6366f1';
-}
+
 
 function escHtml(s) {
   return String(s)
@@ -673,7 +669,7 @@ function renderDashboard() {
     </section>`;
 
   // ── Section 5 — What to Work on Next ────────────────────────────────────
-  const next = buildNextStepCard(assignments, today);
+  const next = buildNextStepCard(assignments);
   const nextSection = next ? `
     <section class="db-next-card" data-next-id="${next.id}" data-next-type="${next.type}">
       <div class="db-next-left">
