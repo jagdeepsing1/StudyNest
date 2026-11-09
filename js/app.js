@@ -107,9 +107,10 @@ function renderPage() {
 // ══════════════════════════════════════════════
 // HELPERS — shared UI fragments
 // ══════════════════════════════════════════════
-function progressBar(pct, colorVar = '--color-primary') {
+function progressBar(pct, color = '--color-primary') {
+  const background = color.startsWith('--') ? `var(${color})` : color;
   return `<div class="progress-bar-track">
-    <div class="progress-bar-fill" style="width:${pct}%;background:var(${colorVar})"></div>
+    <div class="progress-bar-fill" style="width:${pct}%;background:${background}"></div>
   </div>`;
 }
 
@@ -1241,7 +1242,8 @@ function renderGrades() {
             <span class="gcb-letter">${grade.letter}</span>
           </div>
         </div>
-        ${grade.pct !== null ? progressBar(grade.pct) : ''}
+        {/* corrected line */ }
+${grade.pct !== null ? progressBar(grade.pct, course.color) : ''}
         <div class="gcb-rows">${rows}</div>
       </div>`;
   }).join('');
