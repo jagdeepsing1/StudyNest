@@ -217,6 +217,101 @@ const SN_STORAGE = (() => {
   }
 
   // ══════════════════════════════════════════════
+  // EXPORT / IMPORT
+  // ══════════════════════════════════════════════
+
+  /**
+   * Builds a portable backup object containing every localStorage key.
+   * Uses KEYS map directly so any future key is included automatically.
+   *
+   * @returns {{ app: string, version: number, exportedAt: string, data: object }}
+   */
+  function exportAll() {
+    const data = {};
+    Object.entries(KEYS).forEach(([name, storageKey]) => {
+      data[name] = load(storageKey, null);
+    });
+    return {
+      app        : 'studynest',
+      version    : 1,
+      exportedAt : new Date().toISOString(),
+      data,
+    };
+  }
+
+  /**
+   * Validates a backup object thoroughly, then atomically writes all keys.
+   * Throws a descriptive Error if anything is invalid — no data is changed.
+   *
+   * @param {unknown} obj — the parsed JSON from the imported file
+   */
+  function importAll(obj) {
+    // ── 1. Top-level shape ───────────────────────────────────────────────
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+      throw new Error('Backup must be a JSON object.');
+    }
+    if (obj.app !== 'studynest') {
+      throw new Error('Not a StudyNest backup (app field missing or wrong).');
+    }
+    if (obj.version !== 1) {
+      throw new Error(`Unsupported backup version: ${obj.version}.`);
+    }
+    if (!obj.data || typeof obj.data !== 'object' || Array.isArray(obj.data)) {
+      throw new Error('Backup is missing the data field.');
+    }
+
+    // ── 2. Required keys and type checks ────────────────────────────────
+    const { data } = obj;
+
+    if (!Array.isArray(data.assignments)) {
+      throw new Error('Backup data.assignments must be an array.');
+    }
+    if (!Array.isArray(data.messages)) {
+      throw new Error('Backup data.messages must be an array.');
+    }
+    if (typeof data.lessons !== 'object' || data.lessons === null || Array.isArray(data.lessons)) {
+      throw new Error('Backup data.lessons must be a plain object.');
+    }
+    if (typeof data.settings !== 'object' || data.settings === null || Array.isArray(data.settings)) {
+      throw new Error('Backup data.settings must be a plain object.');
+    }
+
+    // ── 3. All-or-nothing write ──────────────────────────────────────────
+    // Serialise every value first so we detect any stringify errors before
+    // touching localStorage. If any write then fails we roll back cleanly.
+    const serialised = {};
+    Object.entries(KEYS).forEach(([name, storageKey]) => {
+      try {
+        serialised[storageKey] = JSON.stringify(data[name]);
+      } catch (e) {
+        throw new Error(`Could not serialise ${name}: ${e.message}`);
+      }
+    });
+
+    // Snapshot current values for rollback
+    const previous = {};
+    Object.values(KEYS).forEach(k => {
+      previous[k] = localStorage.getItem(k);
+    });
+
+    try {
+      Object.entries(serialised).forEach(([storageKey, value]) => {
+        localStorage.setItem(storageKey, value);
+      });
+    } catch (e) {
+      // Storage write failed — roll every key back to its previous state
+      Object.entries(previous).forEach(([storageKey, value]) => {
+        if (value === null) {
+          localStorage.removeItem(storageKey);
+        } else {
+          localStorage.setItem(storageKey, value);
+        }
+      });
+      throw new Error(`Storage write failed; no data was changed. (${e.message})`);
+    }
+  }
+
+  // ══════════════════════════════════════════════
   // RESET (dev helper — clears all stored state)
   // ══════════════════════════════════════════════
   function resetAll() {
@@ -239,6 +334,8 @@ const SN_STORAGE = (() => {
     getMessages, markMessageRead, markMessageUnread, deleteMessage, unreadCount,
     // Settings
     getDefaultSettings, getSettings, saveSettings,
+    // Export / Import
+    exportAll, importAll,
     // Dev
     resetAll,
   };
