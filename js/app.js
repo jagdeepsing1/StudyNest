@@ -745,7 +745,7 @@ function renderDashboard() {
   const upcomingRows = upcomingList.length
     ? upcomingList.slice(0, 5).map(a => {
         const course = SN_DATA.courses.find(c => c.id === a.courseId);
-        return `<div class="upcoming-row ${isDueToday(a.due) ? 'due-today' : ''}" data-assignment="${a.id}">
+        return `<div class="upcoming-row ${isDueToday(a.due) ? 'due-today' : ''}" data-assignment="${escHtml(a.id)}">
           <div class="upcoming-dot" style="background:${course.color}"></div>
           <div class="upcoming-info">
             <div class="upcoming-title">${escHtml(a.title)}</div>
@@ -1016,7 +1016,7 @@ function renderCourseAssignmentsTab(course) {
   if (!assignments.length) return '<p class="empty-hint">No assignments yet.</p>';
   return `<div class="assignment-list">
     ${assignments.map(a => `
-      <div class="assignment-row" data-assignment="${a.id}">
+      <div class="assignment-row" data-assignment="${escHtml(a.id)}">
         <div class="ar-left">
           <div class="ar-title">${escHtml(a.title)}</div>
           <div class="ar-meta">${formatDate(a.due)} · ${a.points} pts</div>
@@ -1079,7 +1079,7 @@ function renderAssignments() {
     const course = SN_DATA.courses.find(c => c.id === a.courseId);
     const overdue = !['submitted','graded'].includes(a.status) && isOverdue(a.due);
     return `
-      <div class="assignment-row clickable" data-assignment="${a.id}">
+      <div class="assignment-row clickable" data-assignment="${escHtml(a.id)}">
         <div class="ar-course-dot" style="background:${course.color}"></div>
         <div class="ar-left">
           <div class="ar-title">${escHtml(a.title)}</div>
@@ -1406,8 +1406,8 @@ function renderInbox() {
   const active    = activeId ? messages.find(m => m.id === activeId) : null;
 
   const msgList = messages.length ? messages.map(m => `
-    <div class="msg-row ${m.read?'read':'unread'} ${activeId===m.id?'active':''}" data-msg="${m.id}">
-      <div class="msg-avatar">${m.from.charAt(0)}</div>
+    <div class="msg-row ${m.read?'read':'unread'} ${activeId===m.id?'active':''}" data-msg="${escHtml(m.id)}">
+      <div class="msg-avatar">${escHtml(m.from.charAt(0))}</div>
       <div class="msg-preview">
         <div class="msg-from">${escHtml(m.from)} ${!m.read ? '<span class="unread-dot"></span>' : ''}</div>
         <div class="msg-subject">${escHtml(m.subject)}</div>
@@ -1423,8 +1423,8 @@ function renderInbox() {
       </div>
       <div class="msg-detail-body">${escHtml(active.body)}</div>
       <div class="msg-actions">
-        <button class="btn btn-secondary btn-mark-unread" data-id="${active.id}">Mark as Unread</button>
-        <button class="btn btn-danger btn-delete-msg" data-id="${active.id}">Delete</button>
+        <button class="btn btn-secondary btn-mark-unread" data-id="${escHtml(active.id)}">Mark as Unread</button>
+        <button class="btn btn-danger btn-delete-msg" data-id="${escHtml(active.id)}">Delete</button>
       </div>
     </div>` : `<div class="msg-placeholder">← Select a message to read</div>`;
 
@@ -1516,8 +1516,13 @@ function renderSettings() {
 
       <div class="settings-card">
         <h3>🛠 Data</h3>
-        <p class="setting-hint">Reset all app data back to the original sample content.</p>
-        <button class="btn btn-danger" id="btn-reset-all">Reset All Data</button>
+        <p class="setting-hint">Export your data as a JSON backup, import a previous backup, or reset everything to the original sample content.</p>
+        <div class="data-actions">
+          <button class="btn btn-secondary" id="btn-export">⬇️ Export Backup</button>
+          <button class="btn btn-secondary" id="btn-import-trigger">⬆️ Import Backup</button>
+          <input type="file" id="btn-import" accept=".json" style="display:none" aria-hidden="true" />
+          <button class="btn btn-danger" id="btn-reset-all">Reset All Data</button>
+        </div>
       </div>
 
       <div class="settings-actions">
@@ -1549,6 +1554,67 @@ function renderSettings() {
     applyTheme();
     document.getElementById('save-confirm').classList.remove('hidden');
     setTimeout(() => document.getElementById('save-confirm').classList.add('hidden'), 2500);
+  });
+
+  // Export
+  document.getElementById('btn-export').addEventListener('click', () => {
+    const backup = SN_STORAGE.exportAll();
+    const blob   = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url    = URL.createObjectURL(blob);
+    const a      = document.createElement('a');
+    a.href       = url;
+    a.download   = `studynest-backup-${todayStr()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Import
+  document.getElementById('btn-import-trigger').addEventListener('click', () => {
+    document.getElementById('btn-import').click();
+  });
+
+  document.getElementById('btn-import').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onerror = () => {
+      e.target.value = '';
+      alert("This file isn't a valid StudyNest backup.");
+    };
+
+    reader.onload = evt => {
+      e.target.value = '';         // reset after every attempt, success or failure
+
+      let parsed;
+      try {
+        parsed = JSON.parse(evt.target.result);
+      } catch {
+        alert("This file isn't a valid StudyNest backup.");
+        return;
+      }
+
+      if (!confirm('Importing will replace all your current data. Continue?')) return;
+
+      try {
+        SN_STORAGE.importAll(parsed);
+      } catch {
+        alert("This file isn't a valid StudyNest backup.");
+        return;
+      }
+
+      applyTheme();
+      updateInboxBadge();
+      navigate('dashboard');
+      // Brief success message via the topbar title (reverts when user navigates)
+      const title = document.getElementById('page-title');
+      const prev  = title.textContent;
+      title.textContent = '✓ Backup imported!';
+      setTimeout(() => { title.textContent = prev; }, 2500);
+    };
+
+    reader.readAsText(file);
   });
 
   // Reset
